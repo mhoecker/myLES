@@ -1,0 +1,11 @@
+#
+*.o
+*.mod
+#
+*.swp
+test.dat
+test1dpoison
+test2.dat
+test2dpoison
+test3.dat
+test3dpoison
