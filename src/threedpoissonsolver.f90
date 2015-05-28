@@ -1,4 +1,5 @@
 module threedpoissonsolver
+use threedderivatives
 contains
 ! Assumes end points are fixed values
 ! solves d^2w/dx^2+d^2w/dy^2+d^2w/dz^2 = f
@@ -27,7 +28,7 @@ subroutine threedjacobi(dxsq,f,w,errnorm)
  real, intent(in) :: f(:,:,:)
  integer :: nx,ny,nz
  integer :: i,j,k
- 
+
  if(size(w).ne.size(f)) then
   print *, "jacobi: ERROR Forcing and value unequal size"
  end if
@@ -44,55 +45,6 @@ subroutine threedjacobi(dxsq,f,w,errnorm)
   end do
  end do
 end subroutine
-
-real function laplace(w,dxsq,i,j,k)
- real, intent(in) :: w(:,:,:)
- real, intent(in) :: dxsq(3)
- integer, intent(in) :: i,j,k
- integer :: nx,ny,nz
- nx = size(w,1)
- ny = size(w,2)
- nz = size(w,3)
-! x derrivative
-! use 1 sided 3 point stencil for border points
- if(i.eq.1) then
-  laplace = (w(i+2,j,k)+w(i,j,k)-2*w(i+1,j,k))/dxsq(1)
- else if(i.eq.nx) then
-  laplace = (w(i,j,k)+w(i-2,j,k)-2*w(i-1,j,k))/dxsq(1)
-! use 3 point centered stencil near edge
- else if((i.eq.2).or.(i.eq.nx-1)) then
-  laplace = (w(i+1,j,k)+w(i-1,j,k)-2*w(i,j,k))/dxsq(1)
-! use 5 point centered stencil for interior points
- else
-  laplace = (-30*w(i,j,k)+16*(w(i+1,j,k)+w(i-1,j,k))-w(i+2,j,k)-w(i-2,j,k))/(6*dxsq(1))
- end if
-! y derrivative
-! use 1 sided 3 point stencil for border points
- if(j.eq.1) then
-  laplace = laplace+(w(i,j+2,k)+w(i,j,k)-2*w(i,j+1,k))/dxsq(2)
- else if(j.eq.ny) then
-  laplace = laplace+(w(i,j,k)+w(i,j-2,k)-2*w(i,j-1,k))/dxsq(2)
-! use 3 point centered stencil near edge
- else if((j.eq.2).or.(j.eq.ny-1)) then
-  laplace = laplace+(w(i,j+1,k)+w(i,j-1,k)-2*w(i,j,k))/dxsq(2)
-! use 5 point centered stencil for interior points
- else
-  laplace = laplace+(-30*w(i,j,k)+16*(w(i,j+1,k)+w(i,j-1,k))-w(i,j+2,k)-w(i,j-2,k))/(6*dxsq(2))
- end if
-! z derrivative
-! use 1 sided 3 point stencil for border points
- if(k.eq.1) then
-  laplace = laplace+(w(i,j,k+2)+w(i,j,k)-2*w(i,j,k+1))/dxsq(2)
- else if(k.eq.nz) then
-  laplace = laplace+(w(i,j,k)+w(i,j,k-2)-2*w(i,j,k-1))/dxsq(2)
-! use 3 point centered stencil near edge
- else if((k.eq.2).or.(k.eq.nz-1)) then
-  laplace = laplace+(w(i,j,k+1)+w(i,j,k-1)-2*w(i,j,k))/dxsq(2)
-! use 5 point centered stencil for interior points
- else
-  laplace = laplace+(-30*w(i,j,k)+16*(w(i,j,k+1)+w(i,j,k-1))-w(i,j,k+2)-w(i,j,k-2))/(6*dxsq(2))
- end if
-end function
 
 real function jacobi(f,w,dxsq,i,j,k)
  real, intent(in) :: f(:,:,:)
@@ -131,4 +83,5 @@ real function jacobi(f,w,dxsq,i,j,k)
   jacobi = jacobi/(30*(dxsq(1)*dxsq(2)+dxsq(2)*dxsq(3)+dxsq(3)*dxsq(1)))
  end if
 end function
+
 end module
