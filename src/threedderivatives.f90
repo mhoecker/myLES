@@ -64,6 +64,16 @@ real function ddz(w,dx,i,j,k)
  end if
 end function
 
+real function div(u,v,w,dx,i,j,k)
+ real, intent(in) :: u(:,:,:), v(:,:,:), w(:,:,:)
+ real, intent(in) :: dx(3)
+ integer, intent(in) :: i,j,k
+ div = ddx(u,dx,i,j,k)
+ div = div+ddy(v,dx,i,j,k)
+ div = div+ddz(w,dx,i,j,k)
+end function
+
+
 ! d^2 /dx^2 derrivative
 real function ddxsq(w,dxsq,i,j,k)
  real, intent(in) :: w(:,:,:)

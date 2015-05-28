@@ -9,11 +9,14 @@ TEST1SRC = $(addprefix $(SRC),test1dpoisson.f90)
 TEST2SRC = $(addprefix $(SRC),test2dpoisson.f90)
 TEST3SRC = $(addprefix $(SRC),test3dpoisson.f90)
 TESTDERSRC = $(addprefix $(SRC),testthreedder.f90)
-OBJECTS = $(TEST1SRC:.f90=.o) $(TEST2SRC:.f90=.o) $(TEST3SRC:.f90=.o) $(TESTDERSRC:.f90=.o)
+IDEALSRC = $(addprefix $(SRC),idealfluid.f90)
+OBJECTS = $(TEST1SRC:.f90=.o) $(TEST2SRC:.f90=.o) $(TEST3SRC:.f90=.o) $(TESTDERSRC:.f90=.o) $(IDEALSRC:.f90=.o)
 
 default : all
 
-all : test1 test2 test3 testder
+all : tests ideal
+
+tests : test1 test2 test3 testder
 
 clean :
 	rm $(OBJECTS)
@@ -28,6 +31,9 @@ $(OBJECTS) : %.o:%.f90 $(MODULES)
 $(PROGRAM) : $(OBJECTS) $(MODULES)
 	$(FC) $(FFLAGS) $(MODULES) $(OBJECTS) -o $@
 	mv $@ .
+
+ideal : $(OBJECTS) $(MODULES)
+	$(FC) $(FFLAGS) $(MODULES) $(IDEALSRC:.f90=.o) -o ideal
 
 test1 : $(OBJECTS) $(MODULES)
 	$(FC) $(FFLAGS) $(MODULES) $(TEST1SRC:.f90=.o) -o test1dpoison
