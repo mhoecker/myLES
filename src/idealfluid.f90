@@ -26,6 +26,7 @@ program idealfluid
  call fillflow
  do m=1,Nt
   call stepfields(dt)
+  call restepfields(dt)
  end do
  call dumpflowfield
   
