@@ -1,4 +1,4 @@
-FC= gfortran
+FC= gfortran-mp-4.9
 FFLAGS = -O3 --free-form -fdefault-real-8 -fimplicit-none
 
 SRC=src/
