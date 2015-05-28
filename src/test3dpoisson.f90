@@ -1,9 +1,9 @@
 program test3dpoisson
  use threedpoissonsolver
  implicit none
- integer, parameter :: Nx = 10
- integer, parameter :: Ny = 10
- integer, parameter :: Nz = 10
+ integer, parameter :: Nx = 32
+ integer, parameter :: Ny = 32
+ integer, parameter :: Nz = 32
  real :: f(Nx,Ny,Nz)
  real :: x(Nx)
  real :: y(Ny)
@@ -11,10 +11,10 @@ program test3dpoisson
  real :: w(Nx,Ny,Nz)
  real, parameter :: dx(3) = (/1,2,3/)
  real, parameter :: pi = 4*atan(1.0)
- real,parameter :: tol=1e-5
- integer, parameter :: Nmax=(Nx+Ny+Nz)**3
+ real,parameter :: tol=1e-6
+ integer, parameter :: Nmax=(Nx+Ny+Nz)
  real :: dxsq(3)
- real :: err
+ real :: errnorm
  integer :: i,j,k
  dxsq(:) = dx(:)**2
  do i=1,Nx
@@ -39,7 +39,7 @@ program test3dpoisson
    end do
   end do
  end do
- call threedpoisson(dxsq,f,w,err,tol,Nmax)
+ call threedpoisson(dxsq,f,w,errnorm,tol,Nmax)
  do i=1,Nx
   do j=1,Ny
    do k=1,Nz
