@@ -42,18 +42,21 @@ recursive subroutine rescalejacobi(dxsq,f,w,errnorm)
  allocate(v(m(1),m(2),m(3)))
  allocate(g(m(1),m(2),m(3)))
  call interp3(f,g)
- call interp3(w,v)
  if((n(1).ne.m(1)).or.(n(2).ne.m(2)).or.(n(3).ne.m(3))) then
-  call rescalejacobi(dysq,g,v,errnorm)
-  call interp3(v,w)
-  call threedjacobi(dxsq,f,w,errnorm)
-  call interp3(w,v)
-  call rescalejacobi(dysq,g,v,errnorm)
+  do i=1,3
+   call interp3(w,v)
+   call rescalejacobi(dysq,g,v,errnorm)
+   call interp3(v,w)
+   call threedjacobi(dxsq,f,w,errnorm)
+  end do
  else
-  call threedjacobi(dysq,g,v,errnorm)
+  do i=1,3
+   call interp3(w,v)
+   call threedjacobi(dysq,g,v,errnorm)
+   call interp3(v,w)
+   call threedjacobi(dxsq,f,w,errnorm)
+  end do
  end if
- call interp3(v,w)
- call threedjacobi(dxsq,f,w,errnorm)
  deallocate(v)
  deallocate(g)
 end subroutine
@@ -147,6 +150,7 @@ subroutine threedjacobi(dxsq,f,w,errnorm)
    end do
   end do
  end do
+ errnorm = errnorm/((nx-2)*(ny-2)*(nz-2))
 end subroutine
 
 real function jacobi(f,w,dxsq,i,j,k)

@@ -12,7 +12,7 @@ program test3dpoisson
  real, parameter :: dx(3) = (/1,2,3/)
  real, parameter :: pi = 4*atan(1.0)
  real,parameter :: tol=1e-6
- integer, parameter :: Nmax=(Nx+Ny+Nz)
+ integer, parameter :: Nmax=1
  real :: dxsq(3)
  real :: errnorm
  integer :: i,j,k
@@ -30,9 +30,9 @@ program test3dpoisson
     f(i,j,k) = f(i,j,k)*(2*x(i)/dx(1)+Nx)/Nx
     f(i,j,k) = f(i,j,k)*(2*z(k)/dx(3)+Nz)/Nz
     f(i,j,k) = f(i,j,k)*(2*z(k)/dx(3)-Nz)/Nz
-    f(i,j,k) = f(i,j,k)
+    f(i,j,k) = 0
     if((i.eq.1).or.(i.eq.Nx).or.(j.eq.1).or.(j.eq.Ny).or.(k.eq.1).or.(k.eq.Nz)) then
-     w(i,j,k) = z(k)/(Nz*dx(3))+cos(2*pi*x(i)/(Nx*dx(1)))+cos(4*pi*y(j)/(Ny*dx(2)))
+     w(i,j,k) = z(k)/(Nz*dx(3))
     else
      w(i,j,k) = 1
     end if

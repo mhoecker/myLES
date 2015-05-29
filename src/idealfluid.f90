@@ -16,8 +16,8 @@ program idealfluid
  real, allocatable :: p(:,:,:), lapP(:,:,:)
  N = (/64,64,64/)
  L = (/128,128,128/)
- Nt = 10
- dt = 0.1
+ Nt = 128
+ dt = 0.02
  Ptol = N(1)*N(2)*N(3)*.01
  do i=1,3
   dx(i) = L(i)/N(i)
@@ -28,7 +28,7 @@ program idealfluid
  call fillflow
 
  do m=1,Nt
-  call predictcorrect(dt,Ptol,(N(1)+N(2)+N(3))**2,Perr)
+  call predictcorrect(dt,Ptol,1,Perr)
  end do
 
  call dumpflowfield
